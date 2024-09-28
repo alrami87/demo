@@ -5,6 +5,11 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -14,13 +19,8 @@ import lombok.experimental.SuperBuilder;
 public class CarInfoRequest {
     String brand;
     String model;
-    Long distanceAge;
-    Float weight;
-    Integer age;
-    Boolean isNew;
     Color color;
-
-
-
-
+    Integer year;
+    BigDecimal price;
+    Boolean isNew;
 }

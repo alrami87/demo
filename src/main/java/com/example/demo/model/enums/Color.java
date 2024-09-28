@@ -1,5 +1,10 @@
 package com.example.demo.model.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum Color {
     BLACK ("черный"),
     WHITE ("белый"),
@@ -8,12 +13,4 @@ public enum Color {
     RED ("красный");
 
     private final String description;
-
-    Color(String description) {
-        this.description = description;
-    }
-
-    public String getDescription () {
-        return description;
-    }
 }
