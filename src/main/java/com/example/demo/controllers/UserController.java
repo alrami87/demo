@@ -54,7 +54,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/carsOfUser/{id}")
+    @GetMapping("/carsOfUser/{id}")
     @Operation(summary = "Получить все автомобили пользователя")
     public List<CarInfoResponse> getAllCarsOfUser(@PathVariable Long id) {
         return carService.getAllCarsOfUser(id);
