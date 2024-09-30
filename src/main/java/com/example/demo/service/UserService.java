@@ -1,14 +1,18 @@
 package com.example.demo.service;
 
+import com.example.demo.exceptions.CustomExeption;
 import com.example.demo.model.db.entity.User;
+import com.example.demo.model.db.repository.CarRepository;
 import com.example.demo.model.db.repository.UserRepository;
 import com.example.demo.model.dto.request.UserInfoRequest;
 import com.example.demo.model.dto.response.UserInfoResponse;
+import com.example.demo.model.dto.response.CarInfoResponse;
 import com.example.demo.model.enums.UserStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,11 +26,15 @@ import java.util.stream.Collectors;
 public class UserService {
     private final ObjectMapper mapper;
     private final UserRepository userRepository;
+    private final CarRepository carRepository;
 
     public UserInfoResponse createUser(UserInfoRequest request) {
-        if (!EmailValidator.getInstance().isValid(request.getEmail())) {
-            return null;
-        }
+        validateEmai(request);
+
+        userRepository.findByEmailIgnoreCase(request.getEmail())
+                .ifPresent(user -> {
+                    throw new CustomExeption(String.format("User with email: %s already exist", request.getEmail()), HttpStatus.BAD_REQUEST);
+                });
 
         User user = mapper.convertValue(request, User.class);
         user.setCreatedAt(LocalDateTime.now());
@@ -37,8 +45,14 @@ public class UserService {
         return mapper.convertValue(save, UserInfoResponse.class);
     }
 
+    private void validateEmai(UserInfoRequest request) {
+        if (!EmailValidator.getInstance().isValid(request.getEmail())) {
+            throw new CustomExeption("invalid eMail format", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     public User getUserFromBD(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new CustomExeption("User not found", HttpStatus.NOT_FOUND));
     }
 
     public UserInfoResponse getUser(Long id) {
@@ -49,9 +63,7 @@ public class UserService {
     }
 
     public UserInfoResponse updateUser(Long id, UserInfoRequest request) {
-        if (!EmailValidator.getInstance().isValid(request.getEmail())) {
-            return null;
-        }
+        validateEmai(request);
 
         User user = getUserFromBD(id);
 
@@ -87,5 +99,11 @@ public class UserService {
 
     public User updateUserData(User user) {
         return userRepository.save(user);
+    }
+
+    public List<CarInfoResponse> getAllCarsOfUser(Long id) {
+        return carRepository.findAllCarsOfUser(id).stream()
+                .map(car -> mapper.convertValue(car, CarInfoResponse.class))
+                .collect(Collectors.toList());
     }
 }

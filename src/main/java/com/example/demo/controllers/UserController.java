@@ -8,6 +8,9 @@ import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +25,6 @@ import static com.example.demo.constants.Constants.USERS;
 public class UserController {
 
     private final UserService userService;
-    private final CarService carService;
 
     @PostMapping
     @Operation(summary = "Создать пользователя")
@@ -48,16 +50,25 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+//    @GetMapping("/all")
+//    @Operation(summary = "Получить список пользователей")
+//    public List<UserInfoResponse> getAllUsers() {
+//        return userService.getAllUsers();
+//    }
+
     @GetMapping("/all")
     @Operation(summary = "Получить список пользователей")
-    public List<UserInfoResponse> getAllUsers(){
-        return userService.getAllUsers();
+    public Page<CarInfoResponse> getAllUsers(@RequestParam Integer page,
+                                             @RequestParam Integer perPage,
+                                             @RequestParam String sort,
+                                             @RequestParam Sort.Direction order,
+                                             @RequestParam String filter) {
+        return new PageImpl<>(null);
     }
 
     @GetMapping("/carsOfUser/{id}")
     @Operation(summary = "Получить все автомобили пользователя")
     public List<CarInfoResponse> getAllCarsOfUser(@PathVariable Long id) {
-        return carService.getAllCarsOfUser(id);
+        return userService.getAllCarsOfUser(id);
     }
-
 }

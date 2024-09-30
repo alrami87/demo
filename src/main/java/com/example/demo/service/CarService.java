@@ -1,20 +1,23 @@
 package com.example.demo.service;
 
+import com.example.demo.exceptions.CustomExeption;
 import com.example.demo.model.db.entity.Car;
 import com.example.demo.model.db.entity.User;
 import com.example.demo.model.db.repository.CarRepository;
 import com.example.demo.model.dto.request.CarInfoRequest;
 import com.example.demo.model.dto.request.CarToUserRequest;
 import com.example.demo.model.dto.response.CarInfoResponse;
-import com.example.demo.model.dto.response.UserInfoResponse;
 import com.example.demo.model.enums.CarStatus;
 import com.example.demo.utils.PaginationUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -91,17 +94,9 @@ public class CarService {
     }
 
     public void addCarToUser(CarToUserRequest request) {
-        Car car = carRepository.findById(request.getCarId()).orElse(null);
-
-        if (car == null) {
-            return;
-        }
+        Car car = carRepository.findById(request.getCarId()).orElseThrow(() -> new CustomExeption("Car not found", HttpStatus.NOT_FOUND));
 
         User userFromDB = userService.getUserFromBD(request.getUserId());
-
-        if (userFromDB == null) {
-            return;
-        }
 
         userFromDB.getCars().add(car);
 
@@ -109,11 +104,5 @@ public class CarService {
 
         car.setUser(userFromDB);
         carRepository.save(car);
-    }
-
-    public List<CarInfoResponse> getAllCarsOfUser(Long id) {
-        return carRepository.findAllCarsOfUser(id).stream()
-                .map(car -> mapper.convertValue(car, CarInfoResponse.class))
-                .collect(Collectors.toList());
     }
 }

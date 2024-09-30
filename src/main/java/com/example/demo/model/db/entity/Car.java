@@ -2,8 +2,7 @@ package com.example.demo.model.db.entity;
 
 import com.example.demo.model.enums.CarStatus;
 import com.example.demo.model.enums.Color;
-import com.example.demo.model.enums.Gender;
-import com.example.demo.model.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,5 +52,6 @@ public class Car {
     Boolean isNew;
 
     @ManyToOne
+    @JsonBackReference(value = "driver_cars")
     User user;
 }

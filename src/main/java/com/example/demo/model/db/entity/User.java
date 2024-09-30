@@ -2,13 +2,13 @@ package com.example.demo.model.db.entity;
 
 import com.example.demo.model.enums.Gender;
 import com.example.demo.model.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import javax.smartcardio.Card;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,5 +55,6 @@ public class User {
     UserStatus status;
 
     @OneToMany
+    @JsonBackReference(value = "driver_cars")
     List<Car> cars;
 }
