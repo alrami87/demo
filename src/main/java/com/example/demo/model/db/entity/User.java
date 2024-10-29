@@ -38,8 +38,14 @@ public class User {
     @Column(name = "middle_name")
     String middleName;
 
-    @Column(name = "age")
-    Integer age;
+    @Column(name = "birth_date")
+    LocalDateTime birthDate;
+
+    @Column(name = "phone", columnDefinition = "VARCHAR(10)")
+    String phone;
+
+    @Column(name = "second_phone", columnDefinition = "VARCHAR(10)")
+    String secondPhone;
 
     @Column(name = "grnder", columnDefinition = "VARCHAR(10)")
     @Enumerated(EnumType.STRING)
@@ -55,6 +61,6 @@ public class User {
     UserStatus status;
 
     @OneToMany
-    @JsonBackReference(value = "driver_cars")
-    List<Car> cars;
+    @JsonBackReference(value = "user_plots")
+    List<Plot> plots;
 }

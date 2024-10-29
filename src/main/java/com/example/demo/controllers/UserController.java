@@ -1,9 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.model.dto.request.UserInfoRequest;
-import com.example.demo.model.dto.response.CarInfoResponse;
 import com.example.demo.model.dto.response.UserInfoResponse;
-import com.example.demo.service.CarService;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,25 +48,13 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-//    @GetMapping("/all")
-//    @Operation(summary = "Получить список пользователей")
-//    public List<UserInfoResponse> getAllUsers() {
-//        return userService.getAllUsers();
-//    }
-
     @GetMapping("/all")
     @Operation(summary = "Получить список пользователей")
-    public Page<CarInfoResponse> getAllUsers(@RequestParam Integer page,
-                                             @RequestParam Integer perPage,
-                                             @RequestParam String sort,
-                                             @RequestParam Sort.Direction order,
-                                             @RequestParam String filter) {
-        return new PageImpl<>(null);
+    public List<UserInfoResponse> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @GetMapping("/carsOfUser/{id}")
-    @Operation(summary = "Получить все автомобили пользователя")
-    public List<CarInfoResponse> getAllCarsOfUser(@PathVariable Long id) {
-        return userService.getAllCarsOfUser(id);
-    }
+
+
+    
 }

@@ -2,11 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.exceptions.CustomExeption;
 import com.example.demo.model.db.entity.User;
-import com.example.demo.model.db.repository.CarRepository;
 import com.example.demo.model.db.repository.UserRepository;
 import com.example.demo.model.dto.request.UserInfoRequest;
 import com.example.demo.model.dto.response.UserInfoResponse;
-import com.example.demo.model.dto.response.CarInfoResponse;
 import com.example.demo.model.enums.UserStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +24,19 @@ import java.util.stream.Collectors;
 public class UserService {
     private final ObjectMapper mapper;
     private final UserRepository userRepository;
-    private final CarRepository carRepository;
 
     public UserInfoResponse createUser(UserInfoRequest request) {
         validateEmai(request);
+        validatePhone(request);
+        validateSecondPhone(request);
 
         userRepository.findByEmailIgnoreCase(request.getEmail())
                 .ifPresent(user -> {
                     throw new CustomExeption(String.format("User with email: %s already exist", request.getEmail()), HttpStatus.BAD_REQUEST);
+                });
+        userRepository.findByPhone(request.getPhone())
+                .ifPresent(user -> {
+                    throw new CustomExeption(String.format("User with phone: %s already exist", request.getPhone()), HttpStatus.BAD_REQUEST);
                 });
 
         User user = mapper.convertValue(request, User.class);
@@ -43,6 +46,20 @@ public class UserService {
         User save = userRepository.save(user);
 
         return mapper.convertValue(save, UserInfoResponse.class);
+    }
+
+    private void validatePhone(UserInfoRequest request) {
+        if (request.getPhone().replaceAll("\\D+", "").length() != 10) {
+            throw new CustomExeption("invalid phone format", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void validateSecondPhone(UserInfoRequest request) {
+        if (!request.getSecondPhone().isEmpty()) {
+            if (request.getSecondPhone().replaceAll("\\D+", "").length() != 10) {
+                throw new CustomExeption("invalid phone format", HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 
     private void validateEmai(UserInfoRequest request) {
@@ -64,16 +81,21 @@ public class UserService {
 
     public UserInfoResponse updateUser(Long id, UserInfoRequest request) {
         validateEmai(request);
+        validatePhone(request);
+        validateSecondPhone(request);
 
         User user = getUserFromBD(id);
 
         user.setEmail(request.getEmail());
-        user.setGender(request.getGender() == null ? user.getGender() : request.getGender());
-        user.setAge(request.getAge() == null ? user.getAge() : request.getAge());
+        user.setPassword(request.getPassword() == null ? user.getPassword() : request.getPassword());
         user.setFirstName(request.getFirstName() == null ? user.getFirstName() : request.getFirstName());
         user.setLastName(request.getLastName() == null ? user.getLastName() : request.getLastName());
         user.setMiddleName(request.getMiddleName() == null ? user.getMiddleName() : request.getMiddleName());
-        user.setPassword(request.getPassword() == null ? user.getPassword() : request.getPassword());
+        user.setBirthDate(request.getBirthDate() == null ? user.getBirthDate() : request.getBirthDate());
+        user.setGender(request.getGender() == null ? user.getGender() : request.getGender());
+        user.setBirthDate(request.getBirthDate() == null ? user.getBirthDate() : request.getBirthDate());
+        user.setPhone(request.getPhone() == null ? user.getPhone() : request.getPhone());
+        user.setSecondPhone(request.getSecondPhone() == null ? user.getSecondPhone() : request.getSecondPhone());
 
         user.setUpdatedAt(LocalDateTime.now());
         user.setStatus(UserStatus.UPDATED);
@@ -84,7 +106,6 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-//        userRepository.deleteById(id);
         User user = getUserFromBD(id);
         user.setUpdatedAt(LocalDateTime.now());
         user.setStatus(UserStatus.DELETED);
@@ -101,9 +122,5 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<CarInfoResponse> getAllCarsOfUser(Long id) {
-        return carRepository.findAllCarsOfUser(id).stream()
-                .map(car -> mapper.convertValue(car, CarInfoResponse.class))
-                .collect(Collectors.toList());
-    }
+
 }

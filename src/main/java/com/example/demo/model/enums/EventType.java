@@ -5,12 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Color {
-    BLACK ("черный"),
-    WHITE ("белый"),
-    GREEN ("зеленый"),
-    BLUE ("синий"),
-    RED ("красный");
+public enum EventType {
+    MEETING("Собрание"),
+    VOTING("Голосование"),
+    DEBTS("Уплата долгов");
 
     private final String description;
 }

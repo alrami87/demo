@@ -1,7 +1,6 @@
 package com.example.demo.model.enums;
 
-public enum CarStatus {
+public enum ManagerStatus {
     CREATED,
-    UPDATED,
     DELETED
 }
