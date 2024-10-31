@@ -17,11 +17,10 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlotPayInfoRequest {
-    Long id;
-    Long plotId;
+    Long plotNo;
     String payDescription;
     LocalDateTime expectedDate;
     Long amount;
-    LocalDateTime factdDate;
+    LocalDateTime factDate;
     PayStatus status;
 }

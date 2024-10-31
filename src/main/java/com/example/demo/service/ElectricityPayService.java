@@ -1,12 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.exceptions.CustomExeption;
-import com.example.demo.model.db.entity.Plot;
 import com.example.demo.model.db.entity.ElectricityPay;
+import com.example.demo.model.db.entity.Plot;
 import com.example.demo.model.db.repository.ElectricityPayRepository;
 import com.example.demo.model.db.repository.PlotRepository;
 import com.example.demo.model.dto.request.ElectricityPayInfoRequest;
 import com.example.demo.model.dto.response.ElectricityPayInfoResponse;
+import com.example.demo.model.dto.response.PlotPayInfoResponse;
 import com.example.demo.model.enums.PayStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,27 +34,42 @@ public class ElectricityPayService {
     }
 
     public ElectricityPayInfoResponse createElectricityPay(ElectricityPayInfoRequest request) {
-        Plot plot = plotRepository.findById(request.getPlotId())
+        Plot plot = plotRepository.findByPlotNo(request.getPlotNo())
                 .orElseThrow(() -> new CustomExeption("Plot not found", HttpStatus.NOT_FOUND));
+
+        electricityPayRepository.findByDateAndAmountAndPlot(request.getDate(), request.getAmount(), plot)
+                .ifPresent(plotPay -> {
+                    throw new CustomExeption((String.format("Plot pay with this date: %s ", request.getDate())
+                            + String.format(" and amount: %s already exist ", request.getAmount())
+                            + String.format("for plot No: %s ", plot.getPlotNo())), HttpStatus.BAD_REQUEST);
+                });
 
         ElectricityPay electricityPay = mapper.convertValue(request, ElectricityPay.class);
         electricityPay.setPlot(plot);
-        electricityPay.setStatus(PayStatus.CREATED);
+        electricityPay.setStatus(PayStatus.PAID);
 
         ElectricityPay save = electricityPayRepository.save(electricityPay);
 
-        return mapper.convertValue(electricityPay, ElectricityPayInfoResponse.class);
+        ElectricityPayInfoResponse response = mapper.convertValue(save, ElectricityPayInfoResponse.class);
+        response.setPlotNo(plot.getPlotNo());
+
+        return response;
     }
 
     public ElectricityPayInfoResponse getElectricityPay(Long id) {
         Optional<ElectricityPay> optionalElectricityPay = electricityPayRepository.findById(id);
 
         ElectricityPay electricityPay = getElectricityPayFromBD(id);
-        return mapper.convertValue(electricityPay, ElectricityPayInfoResponse.class);
+        Plot plot = electricityPay.getPlot();
+
+        ElectricityPayInfoResponse response = mapper.convertValue(electricityPay, ElectricityPayInfoResponse.class);
+        response.setPlotNo(plot.getPlotNo());
+
+        return response;
     }
 
     public ElectricityPayInfoResponse updateElectricityPay(Long id, ElectricityPayInfoRequest request) {
-        Plot plot = plotRepository.findById(request.getPlotId())
+        Plot plot = plotRepository.findById(request.getPlotNo())
                 .orElseThrow(() -> new CustomExeption("Plot not found", HttpStatus.NOT_FOUND));
 
         ElectricityPay electricityPay = getElectricityPayFromBD(id);
@@ -69,7 +84,10 @@ public class ElectricityPayService {
 
         ElectricityPay save = electricityPayRepository.save(electricityPay);
 
-        return mapper.convertValue(save, ElectricityPayInfoResponse.class);
+        ElectricityPayInfoResponse response = mapper.convertValue(save, ElectricityPayInfoResponse.class);
+        response.setPlotNo(plot.getPlotNo());
+
+        return response;
 
     }
 
@@ -98,8 +116,8 @@ public class ElectricityPayService {
         Plot plot = plotRepository.findByPlotNo(plotNo)
                 .orElseThrow(() -> new CustomExeption("Plot not found", HttpStatus.NOT_FOUND));
 
-        return (List<ElectricityPayInfoResponse>) electricityPayRepository.findByPlot(plot).stream()
-                .map(electricityPay -> mapper.convertValue(electricityPay, ElectricityPayInfoResponse.class))
+        return (List<ElectricityPayInfoResponse>) electricityPayRepository.findByPlotAndStatus(plot, PayStatus.OVERDUE)
+                .stream().map(electricityPay -> mapper.convertValue(electricityPay, ElectricityPayInfoResponse.class))
                 .collect(Collectors.toList());
     }
 

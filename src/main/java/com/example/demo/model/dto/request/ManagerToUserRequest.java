@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlotInfoRequest {
-    Long plotNo;
-    Long roadNo;
-    Float area;
-    String cadastralNo;
-    String address;
+public class ManagerToUserRequest {
+    @NotNull
+    private Long managerId;
+
+    @NotNull
+    private Long userId;
 }

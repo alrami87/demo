@@ -13,7 +13,7 @@ import java.util.List;
 import static com.example.demo.constants.Constants.EVENTS;
 import static com.example.demo.constants.Constants.USERS;
 
-@Tag(name = "Пользователи")
+@Tag(name = "События")
 @RestController
 @RequestMapping(EVENTS)
 @RequiredArgsConstructor
@@ -52,11 +52,10 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
-    @GetMapping("/all")
+    @GetMapping("/allFuture")
     @Operation(summary = "Получить список будущихсобытий")
-    public List<EventInfoResponse> getAllEventsInFuture() {
-        return null; //eventService.getAllEventsInFuture();
+    public List<EventInfoResponse> getAllFutureEvents() {
+        return eventService.getAllFutureEvents();
     }
 
-    
 }

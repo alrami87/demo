@@ -9,7 +9,8 @@ public enum PayStatus {
     CREATED("Сформирован"),
     PAID("Оплачен"),
     OVERDUE("Просрочен"),
-    CANCELED("Отменен");
+    CANCELED("Отменен"),
+    APROVED("Подтвержден");
 
     private final String description;
 }

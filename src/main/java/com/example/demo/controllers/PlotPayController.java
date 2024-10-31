@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.dto.request.PlotPayInfoRequest;
 import com.example.demo.model.dto.response.PlotPayInfoResponse;
+import com.example.demo.model.dto.response.PlotPayInfoResponse;
 import com.example.demo.service.PlotPayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,11 +40,28 @@ public class PlotPayController {
         return plotPayService.updatePlotPay(id, request);
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить платеж по ID")
+    public void deletePlotPay(@PathVariable Long id) {
+        plotPayService.deletePlotPay(id);
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "Получить список всех платежей")
+    public List<PlotPayInfoResponse> getAllPlotPays() {
+        return plotPayService.getAllPlotPays();
+    }
+    
     @GetMapping("/plotNo/{plotNo}")
     @Operation(summary = "Получить список платежей по участку")
-    public List<PlotPayInfoResponse> getAllPlotPaysForPlotNo(long plotNo) {
+    public List<PlotPayInfoResponse> getAllPlotPaysForPlotNo(@PathVariable Long plotNo) {
         return plotPayService.getAllPlotPaysForPlotNo(plotNo);
     }
 
+    @GetMapping("/debts/plotNo/{plotNo}")
+    @Operation(summary = "Получить список задолженностей по участку")
+    public List<PlotPayInfoResponse> getAllDebtsForPlotNo(@PathVariable Long plotNo) {
+        return plotPayService.getAllDebtsForPlotNo(plotNo);
+    }
 
 }

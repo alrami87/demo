@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ManagerType {
     DIRECTOR("Председатель"),
-    FINANCIER("Бухгалтер");
+    ASSISTANT_DIRECTOR("Помощник председателя"),
+    FINANCIER("Бухгалтер"),
+    ASSISTANT_FINANCIER("Помощник бухгалтера");
 
     private final String description;
 }

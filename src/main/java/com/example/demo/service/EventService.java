@@ -1,19 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.exceptions.CustomExeption;
-import com.example.demo.model.db.entity.*;
-import com.example.demo.model.db.entity.Event;
-import com.example.demo.model.db.entity.Event;
 import com.example.demo.model.db.entity.Event;
 import com.example.demo.model.db.repository.EventRepository;
 import com.example.demo.model.dto.request.EventInfoRequest;
 import com.example.demo.model.dto.response.EventInfoResponse;
-import com.example.demo.model.dto.response.EventInfoResponse;
-import com.example.demo.model.dto.response.EventInfoResponse;
-import com.example.demo.model.dto.response.EventInfoResponse;
-import com.example.demo.model.enums.EventStatus;
-import com.example.demo.model.enums.EventType;
-import com.example.demo.model.enums.PayStatus;
 import com.example.demo.model.enums.EventStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -72,13 +59,12 @@ public class EventService {
 
         event.setName(request.getName() == null ? event.getName() : request.getName());
         event.setDate(request.getDate() == null ? event.getDate() : request.getDate());
-        event.setDate(request.getDate() == null ? event.getDate() : request.getDate());
         event.setType(request.getType() == null ? event.getType() : request.getType());
         event.setStatus(request.getStatus() == null ? event.getStatus() : request.getStatus());
 
         Event save = eventRepository.save(event);
 
-        return mapper.convertValue(save, EventInfoResponse.class);
+        return mapper.convertValue(event, EventInfoResponse.class);
     }
 
     public void deleteEvent(Long id) {
@@ -94,7 +80,7 @@ public class EventService {
     }
 
     public List<EventInfoResponse> getAllFutureEvents() {
-        return (List<EventInfoResponse>) eventRepository.getAllFutureEvents(LocalDateTime.now()).stream()
+        return (List<EventInfoResponse>) eventRepository.findAllByStatusAndDateAfter(EventStatus.PLANNED, LocalDateTime.now()).stream()
                 .map(event -> mapper.convertValue(event, EventInfoResponse.class))
                 .collect(Collectors.toList());
     }

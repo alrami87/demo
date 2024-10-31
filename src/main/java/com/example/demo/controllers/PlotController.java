@@ -66,7 +66,7 @@ public class PlotController {
         return plotService.getAllPlots();
     }
 
-    @GetMapping("/all/{roadNo}")
+    @GetMapping("/all/roadNo/{roadNo}")
     @Operation(summary = "Получить список участков на линии")
     public List<PlotInfoResponse> getAllPlotsOfRoad(@PathVariable Long roadNo) {
         return plotService.getAllPlotsOfRoad(roadNo);

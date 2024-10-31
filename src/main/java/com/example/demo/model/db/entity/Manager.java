@@ -36,6 +36,6 @@ public class Manager {
     ManagerType type;
 
     @ManyToOne
-    @JsonBackReference(value = "owner")
+    @JsonBackReference(value = "user_manager")
     User user;
 }

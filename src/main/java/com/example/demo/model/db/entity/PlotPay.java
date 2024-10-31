@@ -34,7 +34,7 @@ public class PlotPay {
     Long amount;
 
     @Column(name = "fact_date")
-    LocalDateTime factdDate;
+    LocalDateTime factDate;
 
     @Column(name = "status")
     PayStatus status;

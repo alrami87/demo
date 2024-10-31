@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ElectricityPayInfoRequest {
-    Long id;
-    Long plotId;
+    Long plotNo;
     Long amount;
     LocalDateTime date;
     PayStatus status;

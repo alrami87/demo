@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EventInfoRequest {
-    Long id;
     String name;
     LocalDateTime date;
     EventType type;

@@ -7,10 +7,7 @@ import com.example.demo.model.db.repository.PlotRepository;
 import com.example.demo.model.dto.request.PlotInfoRequest;
 import com.example.demo.model.dto.request.PlotToUserRequest;
 import com.example.demo.model.dto.response.PlotInfoResponse;
-import com.example.demo.model.dto.response.PlotInfoResponse;
-import com.example.demo.model.dto.response.UserInfoResponse;
 import com.example.demo.model.enums.PlotStatus;
-import com.example.demo.model.enums.UserStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +38,7 @@ public class PlotService {
         plotRepository.findByCadastralNo(request.getCadastralNo())
                 .ifPresent(plot -> {
                     throw new CustomExeption(String.format("Plot with Cadastral No: %s already exist",
-                            request.getPlotNo()), HttpStatus.BAD_REQUEST);
+                            request.getCadastralNo()), HttpStatus.BAD_REQUEST);
                 });
 
         Plot plot = mapper.convertValue(request, Plot.class);
@@ -50,7 +47,7 @@ public class PlotService {
 
         Plot save = plotRepository.save(plot);
 
-        return mapper.convertValue(plot, PlotInfoResponse.class);
+        return mapper.convertValue(save, PlotInfoResponse.class);
     }
 
     private void validateCadastralNo(PlotInfoRequest request) {
@@ -128,10 +125,6 @@ public class PlotService {
         return (List<PlotInfoResponse>) plotRepository.findByRoadNo(roadNo).stream()
                 .map(plot -> mapper.convertValue(plot, PlotInfoResponse.class))
                 .collect(Collectors.toList());
-    }
-
-    public Plot updatePlotData(Plot plot) {
-        return plotRepository.save(plot);
     }
 
     public void addPlotToUser(PlotToUserRequest request) {

@@ -23,10 +23,6 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ManagerInfoRequest {
-    Long id;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
     ManagerStatus status;
     ManagerType type;
-    User user;
 }

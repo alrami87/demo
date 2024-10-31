@@ -28,7 +28,4 @@ public class UserInfoRequest {
     String phone;
     String secondPhone;
     Gender gender;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
-    UserStatus status;
 }

@@ -1,9 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.model.dto.request.ElectricityPayInfoRequest;
-import com.example.demo.model.dto.request.PlotPayInfoRequest;
 import com.example.demo.model.dto.response.ElectricityPayInfoResponse;
-import com.example.demo.model.dto.response.PlotPayInfoResponse;
 import com.example.demo.service.ElectricityPayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,9 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.constants.Constants.ELECTRICITYPAYS;
-import static com.example.demo.constants.Constants.PLOTPAYS;
 
-@Tag(name = "Взносы за участки")
+@Tag(name = "Платежи за электроэнергию")
 @RestController
 @RequestMapping(ELECTRICITYPAYS)
 @RequiredArgsConstructor
@@ -42,6 +39,12 @@ public class ElectricityPayController {
         return electricityPayService.updateElectricityPay(id, request);
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить платеж по ID")
+    public void deleteElectricityPay(@PathVariable Long id) {
+        electricityPayService.deleteElectricityPay(id);
+    }
+
     @GetMapping("/all")
     @Operation(summary = "Получить список всех платежей")
     public List<ElectricityPayInfoResponse> getAllElectricityPays() {
@@ -50,8 +53,13 @@ public class ElectricityPayController {
 
     @GetMapping("/plotNo/{plotNo}")
     @Operation(summary = "Получить список платежей по участку")
-    public List<ElectricityPayInfoResponse> getAllElectricityPaysForPlotNo(Long plotNo) {
+    public List<ElectricityPayInfoResponse> getAllElectricityPaysForPlotNo(@PathVariable Long plotNo) {
         return electricityPayService.getAllElectricityPaysForPlotNo(plotNo);
     }
 
+    @GetMapping("/debts/plotNo/{plotNo}")
+    @Operation(summary = "Получить список задолженностей по участку")
+    public List<ElectricityPayInfoResponse> getAllDebtsForPlotNo(@PathVariable Long plotNo) {
+        return electricityPayService.getAllDebtsForPlotNo(plotNo);
+    }
 }

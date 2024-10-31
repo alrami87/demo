@@ -13,6 +13,8 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +51,10 @@ public class UserService {
     }
 
     private void validatePhone(UserInfoRequest request) {
+        if (request.getPhone().isEmpty()) {
+            throw new CustomExeption("Phone can't be empty", HttpStatus.BAD_REQUEST);
+        }
+
         if (request.getPhone().replaceAll("\\D+", "").length() != 10) {
             throw new CustomExeption("invalid phone format", HttpStatus.BAD_REQUEST);
         }
@@ -57,7 +63,7 @@ public class UserService {
     private void validateSecondPhone(UserInfoRequest request) {
         if (!request.getSecondPhone().isEmpty()) {
             if (request.getSecondPhone().replaceAll("\\D+", "").length() != 10) {
-                throw new CustomExeption("invalid phone format", HttpStatus.BAD_REQUEST);
+                throw new CustomExeption("invalid second phone format", HttpStatus.BAD_REQUEST);
             }
         }
     }
@@ -80,13 +86,17 @@ public class UserService {
     }
 
     public UserInfoResponse updateUser(Long id, UserInfoRequest request) {
-        validateEmai(request);
-        validatePhone(request);
+        if (!request.getEmail().isEmpty()) {
+            validateEmai(request);
+        }
+        if (!request.getPhone().isEmpty()) {
+            validatePhone(request);
+        }
         validateSecondPhone(request);
 
         User user = getUserFromBD(id);
 
-        user.setEmail(request.getEmail());
+        user.setEmail(request.getEmail() == null ? user.getEmail() : request.getEmail());
         user.setPassword(request.getPassword() == null ? user.getPassword() : request.getPassword());
         user.setFirstName(request.getFirstName() == null ? user.getFirstName() : request.getFirstName());
         user.setLastName(request.getLastName() == null ? user.getLastName() : request.getLastName());
