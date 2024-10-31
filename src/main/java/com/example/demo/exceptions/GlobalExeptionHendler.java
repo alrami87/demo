@@ -28,7 +28,7 @@ public class GlobalExeptionHendler {
 
     @Bean
     public ErrorAttributes errorAttributes() {
-        return  new DefaultErrorAttributes() {
+        return new DefaultErrorAttributes() {
             @Override
             public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
                 return super.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults()

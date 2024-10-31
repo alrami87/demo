@@ -46,7 +46,6 @@ public class EventService {
     }
 
 
-
     public EventInfoResponse getEvent(Long id) {
         //Optional<Event> optionalEvent = eventRepository.findById(id);
 

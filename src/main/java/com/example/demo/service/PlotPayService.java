@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -90,7 +91,7 @@ public class PlotPayService {
         plotPay.setStatus(request.getStatus());
         plotPay.setFactDate(request.getFactDate() == null ? plotPay.getFactDate() : request.getFactDate());
 
-        if (request.getAmount() != null && request.getAmount() > 0) {
+        if (request.getAmount() != null && request.getAmount().compareTo(BigDecimal.ZERO) >0) {
             plotPay.setFactDate(LocalDateTime.now());
             plotPay.setStatus(PayStatus.PAID);
         }

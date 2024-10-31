@@ -12,5 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager, Long> {
     Optional<Manager> findByTypeAndStatus(ManagerType type, ManagerStatus status);
+
     List<Manager> findByStatus(ManagerStatus status);
 }

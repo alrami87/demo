@@ -2,7 +2,6 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.dto.request.PlotPayInfoRequest;
 import com.example.demo.model.dto.response.PlotPayInfoResponse;
-import com.example.demo.model.dto.response.PlotPayInfoResponse;
 import com.example.demo.service.PlotPayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -51,7 +50,7 @@ public class PlotPayController {
     public List<PlotPayInfoResponse> getAllPlotPays() {
         return plotPayService.getAllPlotPays();
     }
-    
+
     @GetMapping("/plotNo/{plotNo}")
     @Operation(summary = "Получить список платежей по участку")
     public List<PlotPayInfoResponse> getAllPlotPaysForPlotNo(@PathVariable Long plotNo) {

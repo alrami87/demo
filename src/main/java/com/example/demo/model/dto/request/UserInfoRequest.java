@@ -1,7 +1,6 @@
 package com.example.demo.model.dto.request;
 
 import com.example.demo.model.enums.Gender;
-import com.example.demo.model.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -31,7 +32,7 @@ public class PlotPay {
     LocalDateTime expectedDate;
 
     @Column(name = "amount")
-    Long amount;
+    BigDecimal amount;
 
     @Column(name = "fact_date")
     LocalDateTime factDate;

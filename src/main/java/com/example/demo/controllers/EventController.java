@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.constants.Constants.EVENTS;
-import static com.example.demo.constants.Constants.USERS;
 
 @Tag(name = "События")
 @RestController
