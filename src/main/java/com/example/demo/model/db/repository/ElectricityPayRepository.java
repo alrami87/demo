@@ -14,8 +14,6 @@ import java.util.Optional;
 @Repository
 public interface ElectricityPayRepository extends JpaRepository<ElectricityPay, Long> {
     Optional<ElectricityPay> findByDateAndAmountAndPlot(LocalDateTime Date, BigDecimal amount, Plot plot);
-
     List<ElectricityPay> findByPlot(Plot plot);
-
     List<ElectricityPay> findByPlotAndStatus(Plot plot, PayStatus status);
 }

@@ -43,7 +43,7 @@ public class ManagerService {
 
         Manager save = managerRepository.save(manager);
 
-        return mapper.convertValue(manager, ManagerInfoResponse.class);
+        return mapper.convertValue(save, ManagerInfoResponse.class);
     }
 
     public Manager getManagerFromBD(Long id) {

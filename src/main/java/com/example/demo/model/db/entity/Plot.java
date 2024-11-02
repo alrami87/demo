@@ -1,7 +1,6 @@
 package com.example.demo.model.db.entity;
 
 import com.example.demo.model.enums.PlotStatus;
-import com.example.demo.model.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter

@@ -3,7 +3,6 @@ package com.example.demo.service;
 import com.example.demo.exceptions.CustomExeption;
 import com.example.demo.model.db.entity.Plot;
 import com.example.demo.model.db.entity.PlotPay;
-import com.example.demo.model.db.entity.User;
 import com.example.demo.model.db.repository.PlotPayRepository;
 import com.example.demo.model.db.repository.PlotRepository;
 import com.example.demo.model.dto.request.PlotPayInfoRequest;
